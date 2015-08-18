@@ -77,8 +77,8 @@
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Referers" Binding="{Binding Referers, Converter={StaticResource AssemblyListToConcatenatedAssemblyNames}, Mode=OneWay}"></DataGridTextColumn>
 					<DataGridTextColumn Header="Assembly Name" Binding="{Binding AssemblyName.Name, Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly FullName" Binding="{Binding AssemblyName.FullName , Mode=OneWay}"></DataGridTextColumn>
 					<DataGridTextColumn Header="Assembly Version" Binding="{Binding AssemblyName.Version , Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly FullName" Binding="{Binding AssemblyName.FullName , Mode=OneWay}"></DataGridTextColumn>
 					<DataGridTextColumn Header="Assembly Flags" Binding="{Binding AssemblyName.Flags , Mode=OneWay}"></DataGridTextColumn>
 					<DataGridTextColumn Header="Assembly ProcessorArchitecture" Binding="{Binding AssemblyName.ProcessorArchitecture , Mode=OneWay}"></DataGridTextColumn>
 					<DataGridTextColumn Header="Assembly CodeBase" Binding="{Binding AssemblyName.CodeBase , Mode=OneWay}"></DataGridTextColumn>
