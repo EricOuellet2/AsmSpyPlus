@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using AsmSpyPlus.AssemblyInfo;
 using Cursors = System.Windows.Input.Cursors;
 using Path = System.IO.Path;
@@ -55,8 +56,9 @@ namespace AsmSpyPlus
 		{
 			var folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
 
-			string appDataConfigFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Assembly.GetEntryAssembly().GetName().Name + ".txt");
-
+			string appDataConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Assembly.GetEntryAssembly().GetName().Name);
+			string appDataConfigFilename = Path.Combine(appDataConfigDirectory, "Config.txt");
+			
 			if (File.Exists(appDataConfigFilename))
 			{
 				folderBrowser.SelectedPath = File.ReadAllText(appDataConfigFilename);
@@ -88,7 +90,20 @@ namespace AsmSpyPlus
 
 				Model.DuplicateAssemblies = duplicateAssemblies.ToList();
 
+				Directory.CreateDirectory(appDataConfigDirectory);
 				File.WriteAllText(appDataConfigFilename, folderBrowser.SelectedPath);
+
+				foreach (DataGridColumn col in DataGridAssemblies.Columns)
+				{
+					if (col.Header.ToString() == "Assembly FullName")
+					{
+						DataGridColumn colLocal = col;
+						Dispatcher.BeginInvoke(new Action(() => colLocal.SortDirection = ListSortDirection.Ascending), DispatcherPriority.ContextIdle);
+
+						DataGridAssemblies.Items.SortDescriptions.Add(new SortDescription(col.SortMemberPath, ListSortDirection.Ascending));
+					}
+
+				}
 
 				Mouse.OverrideCursor = Cursors.Arrow;
 			}
