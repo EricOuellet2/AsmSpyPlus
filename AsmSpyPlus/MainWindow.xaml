@@ -1,0 +1,103 @@
+﻿<Window x:Class="AsmSpyPlus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:asmSpyPlus="clr-namespace:AsmSpyPlus"
+        xmlns:converter="clr-namespace:AsmSpyPlus.Converter"
+        Title="Referenced assemblies" Height="350" Width="525">
+	<Window.DataContext>
+		<asmSpyPlus:MainWindowModel></asmSpyPlus:MainWindowModel>
+	</Window.DataContext>
+
+	<Window.Resources>
+		<converter:AssemblyToAssemblyNameConverter x:Key="AssemblyToAssemblyNameConverter"></converter:AssemblyToAssemblyNameConverter>
+		<converter:AssemblyListToConcatenatedAssemblyNames x:Key="AssemblyListToConcatenatedAssemblyNames"></converter:AssemblyListToConcatenatedAssemblyNames>
+
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition MinHeight="20" Height="*"></RowDefinition>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition MinHeight="20" Height="4*"></RowDefinition>
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="auto"></RowDefinition>
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Row="0" Grid.Column="0">Folder:</TextBlock>
+
+			<Grid Grid.Row="0" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition></ColumnDefinition>
+					<ColumnDefinition Width="Auto"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+
+				<TextBox Grid.Column="0" DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" Text="{Binding DirectoryPath}"></TextBox>
+
+				<Button Grid.Column="1" Name="CmdBrowse" Height="22" VerticalAlignment="Bottom" Click="CmdBrowse_Click">Browse</Button>
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition></RowDefinition>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0">Results:</TextBlock>
+			<TextBox Grid.Row="1" IsReadOnly="True" MinHeight="20" TextWrapping="Wrap" 
+					 DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" Text="{Binding Result, Mode=OneWay}"></TextBox>
+		</Grid>
+
+		<GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
+
+		<Grid Grid.Row="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition></RowDefinition>
+			</Grid.RowDefinitions>
+			
+			<!--<StackPanel Grid.Row="0" Orientation="Horizontal">
+				<TextBlock>Show System Assemblies:</TextBlock>
+				<CheckBox></CheckBox>
+			</StackPanel>-->
+
+			<DataGrid Grid.Row="1" Name="DataGridAssemblies" AutoGenerateColumns="False"
+					  DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" ItemsSource="{Binding ReferencedAssemblies}">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Referers" Binding="{Binding Referers, Converter={StaticResource AssemblyListToConcatenatedAssemblyNames}, Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly Name" Binding="{Binding AssemblyName.Name, Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly FullName" SortDirection="Ascending" Binding="{Binding AssemblyName.FullName , Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly Version" Binding="{Binding AssemblyName.Version , Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly Flags" Binding="{Binding AssemblyName.Flags , Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly ProcessorArchitecture" Binding="{Binding AssemblyName.ProcessorArchitecture , Mode=OneWay}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Assembly CodeBase" Binding="{Binding AssemblyName.CodeBase , Mode=OneWay}"></DataGridTextColumn>
+
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
+			
+			<DataGrid Grid.Row="3" Name="Duplicate" ItemsSource="{Binding DuplicateAssemblies}" AutoGenerateColumns="False">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Duplicate assembly name" Binding="{Binding Path=., Mode=OneWay}"></DataGridTextColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+
+		</Grid>
+
+
+
+
+	</Grid>
+</Window>
