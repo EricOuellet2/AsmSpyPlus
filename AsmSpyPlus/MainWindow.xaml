@@ -12,6 +12,11 @@
 		<converter:AssemblyToAssemblyNameConverter x:Key="AssemblyToAssemblyNameConverter"></converter:AssemblyToAssemblyNameConverter>
 		<converter:AssemblyListToConcatenatedAssemblyNames x:Key="AssemblyListToConcatenatedAssemblyNames"></converter:AssemblyListToConcatenatedAssemblyNames>
 
+		<Style TargetType="GroupBox">
+			<Style.Setters>
+				<Setter Property="Padding" Value="5"></Setter>
+			</Style.Setters>
+		</Style>
 	</Window.Resources>
 
 	<Grid>
@@ -52,7 +57,7 @@
 				<RowDefinition Height="Auto"></RowDefinition>
 				<RowDefinition></RowDefinition>
 			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0">Results:</TextBlock>
+			<TextBlock Grid.Row="0">Result of analysis:</TextBlock>
 			<TextBox Grid.Row="1" IsReadOnly="True" MinHeight="20" TextWrapping="Wrap" 
 					 DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" Text="{Binding Result, Mode=OneWay}"></TextBox>
 		</Grid>
@@ -65,6 +70,8 @@
 				<RowDefinition></RowDefinition>
 				<RowDefinition Height="Auto"></RowDefinition>
 				<RowDefinition></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition></RowDefinition>
 			</Grid.RowDefinitions>
 			
 			<!--<StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -72,28 +79,38 @@
 				<CheckBox></CheckBox>
 			</StackPanel>-->
 
-			<DataGrid Grid.Row="1" Name="DataGridAssemblies" AutoGenerateColumns="False"
+			<GroupBox Grid.Row="1" Header="List of referenced assembly and their referer(s)">
+				<DataGrid Name="DataGridAssemblies" AutoGenerateColumns="False"
 					  DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" ItemsSource="{Binding ReferencedAssemblies}">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Referers" Binding="{Binding Referers, Converter={StaticResource AssemblyListToConcatenatedAssemblyNames}, Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly Name" Binding="{Binding AssemblyName.Name, Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly Version" Binding="{Binding AssemblyName.Version , Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly FullName" Binding="{Binding AssemblyName.FullName , Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly Flags" Binding="{Binding AssemblyName.Flags , Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly ProcessorArchitecture" Binding="{Binding AssemblyName.ProcessorArchitecture , Mode=OneWay}"></DataGridTextColumn>
-					<DataGridTextColumn Header="Assembly CodeBase" Binding="{Binding AssemblyName.CodeBase , Mode=OneWay}"></DataGridTextColumn>
-
-				</DataGrid.Columns>
-			</DataGrid>
-
-			<GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Referers" Binding="{Binding Referers, Converter={StaticResource AssemblyListToConcatenatedAssemblyNames}, Mode=OneWay}"></DataGridTextColumn>
+						<DataGridTextColumn Header="Assembly Name" Binding="{Binding AssemblyName.Name, Mode=OneWay}"></DataGridTextColumn>
+						<DataGridTextColumn Header="Assembly Version" Binding="{Binding AssemblyName.Version , Mode=OneWay}"></DataGridTextColumn>
+						<DataGridTextColumn Header="Assembly FullName" Binding="{Binding AssemblyName.FullName , Mode=OneWay}"></DataGridTextColumn>
+						<!--<DataGridTextColumn Header="Assembly Flags" Binding="{Binding AssemblyName.Flags , Mode=OneWay}"></DataGridTextColumn>-->
+						<!--<DataGridTextColumn Header="Assembly ProcessorArchitecture" Binding="{Binding AssemblyName.ProcessorArchitecture , Mode=OneWay}"></DataGridTextColumn>-->
+						<!--<DataGridTextColumn Header="Assembly CodeBase" Binding="{Binding AssemblyName.CodeBase , Mode=OneWay}"></DataGridTextColumn>-->
+					</DataGrid.Columns>
+				</DataGrid>
+			</GroupBox>
 			
-			<DataGrid Grid.Row="3" Name="Duplicate" ItemsSource="{Binding DuplicateAssemblies}" AutoGenerateColumns="False">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Duplicate assembly name" Binding="{Binding Path=., Mode=OneWay}"></DataGridTextColumn>
-				</DataGrid.Columns>
-			</DataGrid>
+			<GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
 
+			<GroupBox Grid.Row="3" Header="Assembly with same name but different version that are referenced at least twice">
+				<DataGrid Name="Duplicate" ItemsSource="{Binding DuplicateAssemblies}" AutoGenerateColumns="False">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Duplicate assembly name" Binding="{Binding Path=., Mode=OneWay}"></DataGridTextColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</GroupBox>
+
+			<GridSplitter Grid.Row="4" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
+
+			<GroupBox Grid.Row="5" Header="List of every assembly in the folder">
+				<DataGrid Name="AssembliesDetails" AutoGenerateColumns="True" 
+					  DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" ItemsSource="{Binding ListOfAssemblyDetails}">
+				</DataGrid>
+			</GroupBox>
 		</Grid>
 
 

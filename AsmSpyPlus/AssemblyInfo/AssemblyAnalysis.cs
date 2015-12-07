@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +16,9 @@ namespace AsmSpyPlus.AssemblyInfo
 		// ******************************************************************
 		public string DirectoryPath { get; set; }
 		public string Result { get; private set; }
-		public ObservableCollection<ReferencedAssembly> ReferencedAssemblies { get; set; }
+		public ObservableCollection<ReferencedAssembly> ReferencedAssemblies { get; private set; }
+
+		public HashSet<AssemblyDetails> ListOfAssemblyDetails { get; private set; }
 
 		// ******************************************************************
 		public static AssemblyAnalysis AnalyseFolder(string directoryPath)
@@ -54,13 +57,18 @@ namespace AsmSpyPlus.AssemblyInfo
 					foreach (var fileInfo in assemblyFiles.OrderBy(asm => asm.Name))
 					{
 						Assembly assembly = null;
+						AssemblyDetails assemblyDetails = null;
 						try
 						{
 							if (!fileInfo.IsAssembly())
 							{
 								continue;
 							}
+
 							assembly = Assembly.ReflectionOnlyLoadFrom(fileInfo.FullName);
+
+							assemblyDetails = new AssemblyDetails(assembly);
+							assemblyAnalysis.ListOfAssemblyDetails.Add(assemblyDetails);
 						}
 						catch (Exception ex)
 						{
@@ -71,7 +79,7 @@ namespace AsmSpyPlus.AssemblyInfo
 
 						foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
 						{
-							assemblyAnalysis.AddReferencedAssemblyFor(assembly, referencedAssembly);
+							assemblyAnalysis.AddReferencedAssemblyFor(assemblyDetails, referencedAssembly);
 						}
 					}
 
@@ -145,19 +153,30 @@ namespace AsmSpyPlus.AssemblyInfo
 		{
 			DirectoryPath = directoryPath;
 			ReferencedAssemblies = new ObservableCollection<ReferencedAssembly>();
+			ListOfAssemblyDetails = new HashSet<AssemblyDetails>();
 		}
 
 		// ******************************************************************
-		private void AddReferencedAssemblyFor(Assembly assemblyReferer, AssemblyName assemblyName)
+		private void AddReferencedAssemblyFor(AssemblyDetails assemblyDetailsReferer, AssemblyName assemblyName)
 		{
 			var existingReferencedAsm = ReferencedAssemblies.FirstOrDefault(refAsm => refAsm.UniqueName == ReferencedAssembly.GetUniqueNameFromAssemblyName(assemblyName));
 			if (existingReferencedAsm == null)
 			{
 				existingReferencedAsm = new ReferencedAssembly(assemblyName);
+
+				object o1 = assemblyName.ProcessorArchitecture;
+				object o2= assemblyName.Flags;
+
+				//string asmPath = Path.Combine(DirectoryPath, assemblyName.Name + ".dll");
+				//if (File.Exists(asmPath))
+				//{
+				//	Assembly asm = Assembly.ReflectionOnlyLoadFrom(asmPath);
+				//}
+
 				this.ReferencedAssemblies.Add(existingReferencedAsm);
 			}
 
-			existingReferencedAsm.Referers.Add(assemblyReferer);
+			existingReferencedAsm.Referers.Add(assemblyDetailsReferer);
 		}
 
 		// ******************************************************************

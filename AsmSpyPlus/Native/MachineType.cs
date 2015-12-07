@@ -1,7 +1,8 @@
 ﻿namespace AsmSpy.Native
 {
-  internal enum MachineType
+  public enum MachineType
   {
+	Unknown = -1,
     Native = 0,
     I386 = 0x014c,
     Itanium = 0x0200,

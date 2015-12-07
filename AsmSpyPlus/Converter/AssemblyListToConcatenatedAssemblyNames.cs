@@ -12,12 +12,12 @@ namespace AsmSpyPlus.Converter
 	{
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			var assemblyList = value as List<Assembly>;
+			var assemblyList = value as List<AssemblyDetails>;
 			if (assemblyList != null)
 			{
 				var sb = new StringBuilder();
 				bool first = true;
-				foreach (Assembly asm in assemblyList)
+				foreach (AssemblyDetails asm in assemblyList)
 				{
 					if (first)
 					{
@@ -28,7 +28,7 @@ namespace AsmSpyPlus.Converter
 						sb.Append(Environment.NewLine);
 					}
 
-					sb.Append(asm.GetName().Name);
+					sb.Append(asm.Assembly.GetName().Name);
 				}
 
 				return sb.ToString();

@@ -65,6 +65,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AssemblyDetails.cs" />
     <Compile Include="AssemblyInfo\AssemblyAnalysis.cs" />
     <Compile Include="AssemblyInfo\ReferencedAssembly.cs" />
     <Compile Include="Converter\AssemblyListToConcatenatedAssemblyNames.cs" />

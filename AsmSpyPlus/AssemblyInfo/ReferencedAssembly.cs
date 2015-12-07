@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AsmSpy.Native;
 
 namespace AsmSpyPlus.AssemblyInfo
 {
@@ -8,12 +9,14 @@ namespace AsmSpyPlus.AssemblyInfo
 	{
         public AssemblyName AssemblyName { get; private set; }
 		
-		public List<Assembly> Referers { get; private set; }
+		// public MachineType MachineType { get; set; }
 
-        public ReferencedAssembly(AssemblyName assemblyName)
+		public List<AssemblyDetails> Referers { get; private set; }
+
+		public ReferencedAssembly(AssemblyName assemblyName)
         {
 			AssemblyName = assemblyName;
-			Referers = new List<Assembly>();
+			Referers = new List<AssemblyDetails>();
         }
 
 		public string UniqueName
