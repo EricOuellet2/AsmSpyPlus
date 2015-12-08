@@ -22,6 +22,7 @@ using AsmSpyPlus.AssemblyInfo;
 using Cursors = System.Windows.Input.Cursors;
 using Path = System.IO.Path;
 
+
 namespace AsmSpyPlus
 {
 	/// <summary>
@@ -119,6 +120,26 @@ namespace AsmSpyPlus
 				}
 
 				return _mainWindowModel;
+			}
+		}
+
+		private void AssembliesDetailsOnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+		{
+			var propDesc = e.PropertyDescriptor as PropertyDescriptor;
+			
+			if (propDesc != null)
+			{
+				foreach(Attribute att in propDesc.Attributes)
+				{
+					var browsableAttribute = att as BrowsableAttribute;
+					if (browsableAttribute != null)
+					{
+						if (! browsableAttribute.Browsable)
+						{
+							e.Cancel = true;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:asmSpyPlus="clr-namespace:AsmSpyPlus"
         xmlns:converter="clr-namespace:AsmSpyPlus.Converter"
+        xmlns:behavior="clr-namespace:AsmSpyPlus.Behavior"
         Title="Referenced assemblies" Height="350" Width="525">
+
 	<Window.DataContext>
 		<asmSpyPlus:MainWindowModel></asmSpyPlus:MainWindowModel>
 	</Window.DataContext>
@@ -107,14 +109,12 @@
 			<GridSplitter Grid.Row="4" Height="5" HorizontalAlignment="Stretch" Background="Gray" Margin="2"></GridSplitter>
 
 			<GroupBox Grid.Row="5" Header="List of every assembly in the folder">
-				<DataGrid Name="AssembliesDetails" AutoGenerateColumns="True" 
-					  DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" ItemsSource="{Binding ListOfAssemblyDetails}">
+				<!--AutoGeneratingColumn="AssembliesDetailsOnAutoGeneratingColumn"-->
+				<DataGrid Name="AssembliesDetails" AutoGenerateColumns="True"
+					DataContext="{Binding AssemblyAnalysis, Mode=OneWay}" ItemsSource="{Binding ListOfAssemblyDetails}"
+					behavior:DataGridBehavior.UseBrowsableAttributeOnColumn="True">
 				</DataGrid>
 			</GroupBox>
 		</Grid>
-
-
-
-
 	</Grid>
 </Window>

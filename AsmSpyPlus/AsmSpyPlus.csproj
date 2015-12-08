@@ -68,6 +68,7 @@
     <Compile Include="AssemblyDetails.cs" />
     <Compile Include="AssemblyInfo\AssemblyAnalysis.cs" />
     <Compile Include="AssemblyInfo\ReferencedAssembly.cs" />
+    <Compile Include="Behavior\DataGridBehavior.cs" />
     <Compile Include="Converter\AssemblyListToConcatenatedAssemblyNames.cs" />
     <Compile Include="Converter\AssemblyToAssemblyNameConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">

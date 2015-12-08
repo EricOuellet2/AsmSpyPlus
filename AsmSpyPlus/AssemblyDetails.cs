@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -40,7 +41,22 @@ namespace AsmSpyPlus
 			ModulesInfo = sbModulesInfo.ToString();
 		}
 
+		[Browsable(false)]
 		public Assembly Assembly { get; set; }
+
+		
+		public string FullName
+		{
+			get { return Assembly.FullName; }
+			
+		}
+
+		public string Location
+		{
+			get { return Assembly.Location; }
+
+		}
+
 		public PortableExecutableKinds PortableExecutableKinds { get; set; }
 		public ImageFileMachine ImageFileMachine { get; set; }
 		public String ModulesInfo { get; private set; }
